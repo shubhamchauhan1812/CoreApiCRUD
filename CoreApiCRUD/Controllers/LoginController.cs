@@ -11,6 +11,9 @@ namespace CoreApiCRUD.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-
+        public IActionResult Data()
+        {
+            return Ok();
+        }
     }
 }
