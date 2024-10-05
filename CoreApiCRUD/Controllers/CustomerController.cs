@@ -80,6 +80,24 @@ namespace CoreApiCRUD.Controllers
             }
 
         }
+
+        [HttpPost]
+        [Route("ReactAddData")]
+        public IActionResult ReactAddData([FromBody] ReactInsert model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            else
+            {
+                context.ReactInsert.Add(model);
+                context.SaveChanges();
+                return Ok("Data saved successfully");
+
+            }
+
+        }
         [HttpPost]
         [Route("ReactAdd")]
         public IActionResult ReactAdd([FromBody] ReactInsert model)
