@@ -19,5 +19,9 @@ namespace CoreApiCRUD.Controllers
         {
             return Ok();
         }
+        public IActionResult Data3()
+        {
+            return Ok();
+        }
     }
 }
