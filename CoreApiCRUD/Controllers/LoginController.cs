@@ -19,7 +19,7 @@ namespace CoreApiCRUD.Controllers
         {
             return Ok();
         }
-        public IActionResult Data3()
+        public IActionResult Data4()
         {
             return Ok();
         }
