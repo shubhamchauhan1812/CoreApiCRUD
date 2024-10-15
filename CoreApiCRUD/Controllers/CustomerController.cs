@@ -25,7 +25,7 @@ namespace CoreApiCRUD.Controllers
         public IActionResult GetAllCustomers()
         {
             var data = context.Customers.ToList();
-            if(data.Count() == 0)
+            if (data.Count() == 0)
             {
                 return NotFound();
             }
@@ -33,11 +33,25 @@ namespace CoreApiCRUD.Controllers
             {
                 return Ok(data);
             }
-            
+
+
+        }
+
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginViewModel login)
+        {
+            var data =   await context.Customers.Where(c => c.email == login.email && c.password == login.password).FirstOrDefaultAsync();
+            if(data == null)
+            {
+                return NotFound();
+            }
+            return Ok("Valid user");
+
             
         }
 
-        
+
 
         [HttpGet]
         [Route("GetCustomerById/{id}")]
