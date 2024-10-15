@@ -15,5 +15,7 @@ namespace CoreApiCRUD.Models
         [Required]
         public string Gender { get; set; }
         public bool IsActive { get; set; }
+        public string email { get; set; }
+        public string password { get; set; }
     }
 }
