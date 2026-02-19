@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CoreApiCRUD.Models;
 using Microsoft.EntityFrameworkCore;
 using CoreApiCRUD.Data;
+using CoreApiCRUD.Services;
 
 namespace CoreApiCRUD.Controllers
 {
@@ -15,17 +16,21 @@ namespace CoreApiCRUD.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
+        
         private readonly ApplicationContext context;
-        public CustomerController(ApplicationContext context)
+        private readonly RateLimitService _rateLimitService;
+        public CustomerController(ApplicationContext context, RateLimitService rateLimitService)//, RateLimitService rateLimitService
         {
             this.context = context;
+            _rateLimitService = rateLimitService;
         }
         [HttpGet]
         [Route("GetAllCustomers")]
+        [ServiceFilter(typeof(RateLimitActionFilter))]
         public IActionResult GetAllCustomers()
         {
-            var data = context.Customers.ToList();
-            if (data.Count() == 0)
+            var data = context.ReactInsert.ToList();
+            if (data.Count == 0)
             {
                 return NotFound();
             }
@@ -55,23 +60,32 @@ namespace CoreApiCRUD.Controllers
 
         [HttpGet]
         [Route("GetCustomerById/{id}")]
+        //[ServiceFilter(typeof(RateLimitActionFilter))] // Apply rate-limiting to this endpoint
         public IActionResult GetCustomerById(int id)
         {
-            if(id == 0)
+            try
             {
-                return NotFound();
-            }
-            else
-            {
-                var data = context.Customers.Where(e => e.Id == id).SingleOrDefault();
-                if(data == null)
+                if (id == 0)
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
                 else
                 {
-                    return Ok(data);
+                   
+                    var data = context.Customers.Where(e => e.Id == id).SingleOrDefault();
+                    if (data == null)
+                    {
+                        return BadRequest();
+                    }
+                    else
+                    {
+                        return Ok(data);
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                return Ok();
             }
 
         }

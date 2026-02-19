@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using CoreApiCRUD.Services;
 
 namespace CoreApiCRUD
 {
@@ -30,7 +31,12 @@ namespace CoreApiCRUD
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            // Register Memory Cache and RateLimitService
+            services.AddMemoryCache(); // Add memory caching for RateLimitService
+            services.AddSingleton<RateLimitService>(); // Register RateLimitService as Singleton or Scoped
+
+            // Register RateLimitActionFilter
+            services.AddScoped<RateLimitActionFilter>(); // Register the filter
             services.AddControllers();
             services.AddCors(options =>
             {
